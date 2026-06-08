@@ -1,10 +1,10 @@
-# DNA-REC: Denoising and Augmentation of Item Graphs for Long-tail Recommendation
+# DnA-Rec: Denoising and Augmentation of Item Graphs for Long-tail Recommendation
 
 ## Overview
 
 How can we accurately recommend unpopular items to users? Despite receiving few interactions, tail items are valuable as they improve recommendation diversity, facilitate item discovery, and generate substantial business value. Graph-based recommenders often alleviate data sparsity by constructing auxiliary item graphs from co-occurrence patterns, allowing information to propagate across related items. However, accurately identifying useful relations in such graphs remains difficult as raw co-occurrence is contaminated by spurious relations and popularity bias, causing message propagation to amplify noise rather than reflect genuine user preferences. Moreover, denoising alone is insufficient since many tail items remain weakly connected or isolated, preventing them from receiving useful information.
 
-In this paper, we propose **DNA-REC** (**D**enoising and **A**ugmentation of Item Graphs for Long-tail **Rec**ommendation), a framework for accurate long-tail recommendation that jointly identifies reliable item relations and enriches sparsely interacted tail items. Specifically, DNA-REC combines popularity-aware graph denoising, information bottleneck learning, and semantic augmentation to remove noisy and popularity-driven relations while providing additional semantic signals to isolated tail items.
+In this paper, we propose **DnA-Rec** (**D**enoising **and** **A**ugmentation of Item Graphs for Long-tail **Rec**ommendation), a framework for accurate long-tail recommendation that jointly identifies reliable item relations and enriches sparsely interacted tail items. Specifically, DnA-Rec combines popularity-aware graph denoising, information bottleneck learning, and semantic augmentation to remove noisy and popularity-driven relations while providing additional semantic signals to isolated tail items.
 
 ## Requirements
 
@@ -27,10 +27,10 @@ pip install torch faiss-gpu numba numpy pandas scikit-learn pyarrow tqdm
 ## Repository Structure
 
 ```
-DNA-REC/
+DnA-Rec/
 ├── src/
 │   ├── run_gbsr_item.py        # Training script
-│   ├── gbsr_item.py            # DNA-REC model
+│   ├── gbsr_item.py            # DnA-Rec model
 │   ├── GBSR.py                 # HSIC kernel utilities
 │   ├── rec_dataset.py          # Dataset loading and item graph construction
 │   ├── evaluate.py             # FAISS-based ranking evaluation
