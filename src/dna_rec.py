@@ -11,7 +11,7 @@ class DnARec(nn.Module):
     DNA-REC: item-item graph bottleneck for long-tail recommendation.
 
     A popularity-aware MLP gates each item-item co-occurrence edge.
-    Optional attribute graph (modes A/B/C) injects semantic signals for tail items.
+    Optional attribute graph (modes A/B) injects semantic signals for tail items.
     """
 
     def __init__(self, args, dataset, item_feats_np, item_degrees_dict, coo_i, coo_j):
@@ -359,17 +359,13 @@ class DnARec(nn.Module):
 
         return (weights * per_loss).mean()
 
-    def _attr_cl_loss(self, anchor, positive, pos_items, symmetric=False):
-        """InfoNCE between two item embedding views over the current batch."""
+    def _attr_cl_loss(self, anchor, positive, pos_items):
+        """One-way InfoNCE between co-occurrence and attribute item embeddings."""
         unique_items = torch.unique(pos_items)
         z = F.normalize(anchor[unique_items],   p=2, dim=1)
         h = F.normalize(positive[unique_items], p=2, dim=1)
         labels = torch.arange(z.size(0), device=self.device)
-
-        loss = F.cross_entropy(z @ h.T / self.cl_temp, labels)
-        if symmetric:
-            loss = (loss + F.cross_entropy(h @ z.T / self.cl_temp, labels)) / 2.0
-        return loss
+        return F.cross_entropy(z @ h.T / self.cl_temp, labels)
 
     # ── Training & inference ───────────────────────────────────────────────────
 
@@ -407,17 +403,6 @@ class DnARec(nn.Module):
                                        user_emb_old, item_emb_old,
                                        user_emb_coo, item_emb_coo)
 
-        elif self.attr_graph_mode == 'C':
-            user_emb_old, item_emb_old = self.forward(self.adj_matrix)
-            user_emb, item_emb_coo     = self.forward(masked_adj)
-            item_emb_attr = self.forward_attr(self.attr_adj_ii)
-            item_emb = item_emb_coo
-            user_emb_coo = user_emb
-            auc, bpr_loss, reg_loss = self.bpr_loss(users, pos_items, neg_items, user_emb, item_emb)
-            ib_loss = self._apply_hsic(users, pos_items,
-                                       user_emb_old, item_emb_old,
-                                       user_emb_coo, item_emb_coo)
-
         # InfoNCE: align pure-bipartite embedding with attr_proj
         if self.lambda_cl > 0.0:
             _, item_emb_last = self.forward_last_layer(self.pure_bipartite_adj.to(self.device))
@@ -425,12 +410,10 @@ class DnARec(nn.Module):
         else:
             cl_loss = torch.tensor(0.0, device=self.device)
 
-        # Attr-graph CL: mode A (one-way) / mode C (symmetric)
-        if self.attr_graph_mode in ('A', 'C') and self.lambda_attr > 0.0:
-            symmetric = (self.attr_graph_mode == 'C')
-            anchor    = item_emb_coo.detach() if self.attr_graph_mode == 'A' else item_emb_coo
-            attr_cl   = self._attr_cl_loss(anchor, item_emb_attr, pos_items, symmetric=symmetric)
-            cl_loss   = cl_loss + attr_cl * self.lambda_attr
+        # Attr-graph CL: mode A one-way InfoNCE
+        if self.attr_graph_mode == 'A' and self.lambda_attr > 0.0:
+            attr_cl = self._attr_cl_loss(item_emb_coo.detach(), item_emb_attr, pos_items)
+            cl_loss = cl_loss + attr_cl * self.lambda_attr
 
         total = bpr_loss + reg_loss + ib_loss + cl_loss
         return auc, bpr_loss, reg_loss, ib_loss, cl_loss, total

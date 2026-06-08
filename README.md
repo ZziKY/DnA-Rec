@@ -169,7 +169,7 @@ python train.py --dataset amazon_fashion --no_hparam_autoload [other args...]
 
 | Argument | Description |
 |---|---|
-| `--attr_graph_mode` | Semantic augmentation: `none`, `A` (two-branch), `B` (tail injection), `C` (symmetric InfoNCE) |
+| `--attr_graph_mode` | Semantic augmentation: `none`, `A` (two-branch BPR + one-way CL), `B` (tail edge injection) |
 | `--k_attr` | Top-k cosine neighbors in attribute graph |
 | `--lambda_attr` | Weight for attribute graph alignment loss |
 | `--gamma_attr` | Scale for tail cosine edges added to BPR graph (mode B) |

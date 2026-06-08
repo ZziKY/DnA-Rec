@@ -113,13 +113,13 @@ def parse_args():
     parser.add_argument('--no_aux_hsic',        action='store_false', dest='aux_hsic')
     parser.add_argument('--lambda_aux_hsic',    type=float, default=1.0)
     parser.add_argument('--attr_graph_mode',    type=str,   default='none',
-                        choices=['none', 'A', 'B', 'C'],
+                        choices=['none', 'A', 'B'],
                         help='Semantic augmentation: none, A=two-branch BPR+CL, '
-                             'B=tail edge injection, C=symmetric InfoNCE')
+                             'B=tail edge injection')
     parser.add_argument('--k_attr',             type=int,   default=10,
                         help='Top-k cosine neighbors in attr graph')
     parser.add_argument('--lambda_attr',        type=float, default=0.1,
-                        help='Weight for attr-graph alignment loss (modes A/C)')
+                        help='Weight for attr-graph alignment loss (mode A)')
     parser.add_argument('--gamma_attr',         type=float, default=0.5,
                         help='Scale for tail cosine edges added to BPR graph (mode B)')
     parser.add_argument('--deg_thresh',         type=int,   default=10,
