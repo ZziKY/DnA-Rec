@@ -1,0 +1,8 @@
+torch>=1.13
+faiss-gpu
+numba
+numpy
+pandas
+scikit-learn
+pyarrow
+tqdm
