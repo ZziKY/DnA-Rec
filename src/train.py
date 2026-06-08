@@ -108,10 +108,6 @@ def parse_args():
                         help='Max clamp value for IPS weights')
     parser.add_argument('--projection_head',    action='store_true',  default=False)
     parser.add_argument('--no_projection_head', action='store_false', dest='projection_head')
-    parser.add_argument('--aux_hsic',           action='store_true',  default=False,
-                        help='Add HSIC(E^mask_item, log(1+deg)) auxiliary loss')
-    parser.add_argument('--no_aux_hsic',        action='store_false', dest='aux_hsic')
-    parser.add_argument('--lambda_aux_hsic',    type=float, default=1.0)
     parser.add_argument('--attr_graph_mode',    type=str,   default='none',
                         choices=['none', 'A', 'B'],
                         help='Semantic augmentation: none, A=two-branch BPR+CL, '

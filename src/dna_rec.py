@@ -61,8 +61,6 @@ class DnARec(nn.Module):
         self.cl_ips_clip    = getattr(args, 'cl_ips_clip', 5.0)
         self.projection_head = getattr(args, 'projection_head', False)
 
-        self.aux_hsic        = getattr(args, 'aux_hsic', False)
-        self.lambda_aux_hsic = getattr(args, 'lambda_aux_hsic', 1.0)
 
         if self.projection_head:
             self.cl_proj = nn.Sequential(
@@ -285,24 +283,8 @@ class DnARec(nn.Module):
 
         return loss_item + loss_user
 
-    def _aux_hsic_loss(self, pos_items, item_emb_coo):
-        """HSIC(E^mask_item, log(1+deg)) — penalises popularity bias."""
-        unique_i = torch.unique(pos_items)
-        m = self.batch_size
-        ix = F.normalize(item_emb_coo[unique_i], p=2, dim=1)
-
-        deg_feat = torch.log1p(self.deg_vec[unique_i]).unsqueeze(1)
-        d_min, d_max = deg_feat.min(), deg_feat.max()
-        if d_max > d_min:
-            deg_feat = (deg_feat - d_min) / (d_max - d_min)
-
-        return hsic(kernel_matrix(ix, self.sigma), kernel_matrix(deg_feat, self.sigma), m)
-
     def _apply_hsic(self, users, pos_items, user_emb_old, item_emb_old, user_emb_coo, item_emb_coo):
-        ib = self.hsic_loss(users, pos_items, user_emb_old, item_emb_old, user_emb_coo, item_emb_coo)
-        if self.aux_hsic:
-            ib = ib + self._aux_hsic_loss(pos_items, item_emb_coo) * self.lambda_aux_hsic
-        return ib * self.beta
+        return self.hsic_loss(users, pos_items, user_emb_old, item_emb_old, user_emb_coo, item_emb_coo) * self.beta
 
     def _pop_weight(self, unique_items):
         """Pop(i) = 1 - r / (r + exp(deg_i / r))."""

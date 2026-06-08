@@ -118,7 +118,7 @@ python train.py --dataset book_crossing --split split8 --co_occur_version v2 \
 
 ```bash
 python train.py --dataset amazon_fashion --device_id 0 \
-  --attr_graph_mode none --no_projection_head --no_aux_hsic --gcn_layer 2 \
+  --attr_graph_mode none --no_projection_head --gcn_layer 2 \
   --k_neighbors 5 --beta 1.0 --sigma 0.5 --edge_bias 0.25 --latent_dim 256 \
   --gate_temp 0.4 --pop_alpha_init 0.0 \
   --lambda_cl 0.0 --cl_temp 0.05 --cl_convergence 200 --cl_ips_clip 10 \
@@ -132,7 +132,7 @@ python train.py --dataset amazon_fashion --device_id 0 \
 ```bash
 python train.py --dataset amazon_fashion --device_id 0 \
   --attr_graph_mode B --cl_option 4 \
-  --no_projection_head --no_aux_hsic --gcn_layer 2 \
+  --no_projection_head --gcn_layer 2 \
   --k_neighbors 5 --beta 2.0 --sigma 0.5 --edge_bias 0.1 --latent_dim 256 \
   --gate_temp 0.4 --pop_alpha_init 0.5 \
   --lambda_cl 0.1 --cl_temp 0.2 --cl_convergence 100 --cl_ips_clip 10 \
@@ -146,7 +146,7 @@ python train.py --dataset amazon_fashion --device_id 0 \
 ```bash
 python train.py --dataset amazon_fashion --device_id 0 \
   --attr_graph_mode A --cl_option 7 \
-  --no_projection_head --no_aux_hsic --gcn_layer 2 \
+  --no_projection_head --gcn_layer 2 \
   --k_neighbors 5 --beta 3.0 --sigma 0.5 --edge_bias 0.25 --latent_dim 256 \
   --gate_temp 0.2 --pop_alpha_init 0.5 \
   --lambda_cl 0.5 --cl_temp 0.05 --cl_convergence 200 --cl_ips_clip 20 \
