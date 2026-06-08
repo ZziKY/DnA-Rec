@@ -1,0 +1,16 @@
+{
+  "num_user": 1908,
+  "num_item": 2065,
+  "num_interactions": 11211,
+  "density_pct": 0.2845,
+  "avg_per_user": 5.88,
+  "avg_per_item": 5.43,
+  "feat_dim": 1138,
+  "kcore": 3,
+  "min_stars": null,
+  "n_train": 8969,
+  "n_val": 1121,
+  "n_test": 1121,
+  "split_style": "BC (per-user/item train guarantee, val/test by ratio)",
+  "cold_items": 0
+}
