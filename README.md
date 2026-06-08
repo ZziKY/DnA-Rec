@@ -205,3 +205,12 @@ Results are reported as **NDCG@K** and **HR@K** across:
 3. **5-Group** — five equal popularity bins from tail to head
 
 The CSV at `--result_path` contains per-seed results plus mean/std aggregates.
+
+## Evaluation Protocol
+- All results are averaged over **5 seeds** (1, 2, 3, 4, 5).
+
+- **Training**: max 300 epochs, early stopping patience 20, batch size 512, best checkpoint selected by NDCG@20 on validation set.
+
+- **Batch construction**: full-batch mode — the last batch always has exactly `batch_size` samples by sliding back from the end (overlapping with the previous batch) rather than using a smaller remainder batch.
+
+- **Metric aggregation**: user-wise global mean — each user contributes equally regardless of batch boundaries, i.e., `mean(metric_u for all u in eval_users)`.
