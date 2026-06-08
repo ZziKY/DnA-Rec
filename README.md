@@ -29,8 +29,8 @@ pip install torch faiss-gpu numba numpy pandas scikit-learn pyarrow tqdm
 ```
 DnA-Rec/
 ├── src/
-│   ├── run_gbsr_item.py        # Training script
-│   ├── gbsr_item.py            # DnA-Rec model
+│   ├── train.py                # Training script
+│   ├── dna_rec.py              # DnA-Rec model
 │   ├── GBSR.py                 # HSIC kernel utilities
 │   ├── rec_dataset.py          # Dataset loading and item graph construction
 │   ├── evaluate.py             # FAISS-based ranking evaluation
@@ -74,7 +74,7 @@ cd src
 #### (1) GBSR Basic
 
 ```bash
-python run_gbsr_item.py --dataset book_crossing --split split8 --co_occur_version v2 \
+python train.py --dataset book_crossing --split split8 --co_occur_version v2 \
   --k_neighbors 10 --device_id 0 --gcn_layer 2 --latent_dim 256 \
   --beta 2.0 --sigma 0.5 --edge_bias 0.25 --gate_temp 0.4 --pop_alpha_init 0.1 \
   --batch_size 512 --lr 0.001 --epochs 300 --l2_reg 0.0001 \
@@ -86,7 +86,7 @@ python run_gbsr_item.py --dataset book_crossing --split split8 --co_occur_versio
 #### (2) Mode B + Pop
 
 ```bash
-python run_gbsr_item.py --dataset book_crossing --split split8 --co_occur_version v2 \
+python train.py --dataset book_crossing --split split8 --co_occur_version v2 \
   --k_neighbors 10 --device_id 0 --gcn_layer 2 --latent_dim 256 \
   --beta 2.0 --sigma 0.5 --edge_bias 0.25 --gate_temp 0.4 --pop_alpha_init 0.1 \
   --batch_size 512 --lr 0.001 --epochs 300 --l2_reg 0.0001 \
@@ -99,7 +99,7 @@ python run_gbsr_item.py --dataset book_crossing --split split8 --co_occur_versio
 #### (3) Mode A + revIPS
 
 ```bash
-python run_gbsr_item.py --dataset book_crossing --split split8 --co_occur_version v2 \
+python train.py --dataset book_crossing --split split8 --co_occur_version v2 \
   --k_neighbors 10 --device_id 0 --gcn_layer 2 --latent_dim 256 \
   --beta 2.0 --sigma 0.5 --edge_bias 0.25 --gate_temp 0.4 --pop_alpha_init 0.1 \
   --batch_size 512 --lr 0.001 --epochs 300 --l2_reg 0.0001 \
@@ -117,7 +117,7 @@ python run_gbsr_item.py --dataset book_crossing --split split8 --co_occur_versio
 #### (1) GBSR Basic
 
 ```bash
-python run_gbsr_item.py --dataset amazon_fashion --device_id 0 \
+python train.py --dataset amazon_fashion --device_id 0 \
   --attr_graph_mode none --no_projection_head --no_aux_hsic --gcn_layer 2 \
   --k_neighbors 5 --beta 1.0 --sigma 0.5 --edge_bias 0.25 --latent_dim 256 \
   --gate_temp 0.4 --pop_alpha_init 0.0 \
@@ -130,7 +130,7 @@ python run_gbsr_item.py --dataset amazon_fashion --device_id 0 \
 #### (2) Mode B + Pop
 
 ```bash
-python run_gbsr_item.py --dataset amazon_fashion --device_id 0 \
+python train.py --dataset amazon_fashion --device_id 0 \
   --attr_graph_mode B --cl_option 4 \
   --no_projection_head --no_aux_hsic --gcn_layer 2 \
   --k_neighbors 5 --beta 2.0 --sigma 0.5 --edge_bias 0.1 --latent_dim 256 \
@@ -144,7 +144,7 @@ python run_gbsr_item.py --dataset amazon_fashion --device_id 0 \
 #### (3) Mode A + revIPS
 
 ```bash
-python run_gbsr_item.py --dataset amazon_fashion --device_id 0 \
+python train.py --dataset amazon_fashion --device_id 0 \
   --attr_graph_mode A --cl_option 7 \
   --no_projection_head --no_aux_hsic --gcn_layer 2 \
   --k_neighbors 5 --beta 3.0 --sigma 0.5 --edge_bias 0.25 --latent_dim 256 \
@@ -162,7 +162,7 @@ python run_gbsr_item.py --dataset amazon_fashion --device_id 0 \
 Each dataset auto-loads `src/configs/hyperparams/<dataset>.json` as default values. Any CLI argument overrides the config. To disable auto-loading:
 
 ```bash
-python run_gbsr_item.py --dataset amazon_fashion --no_hparam_autoload [other args...]
+python train.py --dataset amazon_fashion --no_hparam_autoload [other args...]
 ```
 
 ## Key Hyperparameters

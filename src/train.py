@@ -15,7 +15,7 @@ sys.path.append('./')
 sys.path.append('../')
 from log import Logger
 from set import seed_everything, set_color
-from gbsr_item import GBSRItem
+from dna_rec import DnARec
 from rec_dataset import Dataset
 from evaluate import (
     num_faiss_evaluate,
@@ -274,8 +274,8 @@ def run_one_seed(base_args, seed, root_record_path):
     model_save_path = os.path.join(record_path, 'models') + os.sep
     makedir(model_save_path)
 
-    copyfile('./gbsr_item.py',     os.path.join(record_path, 'gbsr_item.py'))
-    copyfile('./run_gbsr_item.py', os.path.join(record_path, 'run_gbsr_item.py'))
+    copyfile('./dna_rec.py', os.path.join(record_path, 'dna_rec.py'))
+    copyfile('./train.py',   os.path.join(record_path, 'train.py'))
 
     log = Logger(record_path)
     for a in vars(args):
@@ -295,7 +295,7 @@ def run_one_seed(base_args, seed, root_record_path):
     else:
         coo_i, coo_j, _ = rec_data.build_item_coo_v2(item_feats_np, args.k_neighbors)
 
-    model     = GBSRItem(args, rec_data, item_feats_np, item_degrees, coo_i, coo_j).to(device)
+    model     = DnARec(args, rec_data, item_feats_np, item_degrees, coo_i, coo_j).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     for name, param in model.named_parameters():
@@ -436,7 +436,7 @@ def main():
     args.data_path = f'../datasets/{args.dataset}/'
 
     ver_tag = f'v{args.co_occur_version.lstrip("v")}'
-    root_record_path = f'../saved/{args.dataset}/GBSRItem_{ver_tag}_k{args.k_neighbors}/{args.runid}/'
+    root_record_path = f'../saved/{args.dataset}/DnARec_{ver_tag}_k{args.k_neighbors}/{args.runid}/'
     makedir(root_record_path)
 
     seed_results = []

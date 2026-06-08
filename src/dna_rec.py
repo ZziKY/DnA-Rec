@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from GBSR import kernel_matrix, hsic
 
 
-class GBSRItem(nn.Module):
+class DnARec(nn.Module):
     """
     DNA-REC: item-item graph bottleneck for long-tail recommendation.
 
@@ -15,7 +15,7 @@ class GBSRItem(nn.Module):
     """
 
     def __init__(self, args, dataset, item_feats_np, item_degrees_dict, coo_i, coo_j):
-        super(GBSRItem, self).__init__()
+        super(DnARec, self).__init__()
         self.num_user   = args.num_user
         self.num_item   = args.num_item
         self.gcn_layer  = args.gcn_layer
