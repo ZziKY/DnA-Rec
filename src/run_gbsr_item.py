@@ -26,7 +26,6 @@ from evaluate import (
 
 DATASET_INFO = {
     'book_crossing':  {'num_user': 6330, 'num_item': 5836},
-    'movielens_1m':   {'num_user': 6040, 'num_item': 3493},
     'amazon_fashion': {'num_user': 1908, 'num_item': 2065},
 }
 
